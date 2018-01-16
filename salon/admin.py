@@ -1,5 +1,5 @@
 from django.contrib import admin
-from salon.models import Service, ServiceType, Blog, Staff, UserProfile
+from salon.models import Service, ServiceType, Blog, Staff, UserProfile, Links
 
 class ServiceTypeAdmin(admin.ModelAdmin):
 	list_display = ('service', 'name', 'views', 'likes')
@@ -10,3 +10,4 @@ admin.site.register(ServiceType, ServiceTypeAdmin)
 admin.site.register(Blog)
 admin.site.register(Staff)
 admin.site.register(UserProfile)
+admin.site.register(Links)

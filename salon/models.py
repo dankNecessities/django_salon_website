@@ -46,3 +46,12 @@ class UserProfile(models.Model):
 
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
 	picture = models.ImageField(upload_to='profile_images', blank=True)
+
+class Links(models.Model):
+
+	name = models.CharField(max_length=128, unique=True)
+	url = models.URLField()
+	picture = models.ImageField(upload_to='link_images', blank=True)
+
+	def __str__(self):
+		return self.name
