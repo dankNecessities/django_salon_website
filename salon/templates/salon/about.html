@@ -1,0 +1,36 @@
+{% extends 'salon/base.html' %}
+{% load static %}
+{% block title %}About{% endblock %}
+{% block body_block %}
+<div class="container" style="border-right: 1px solid #eee;">
+	<div class="row bg-light">
+		<div class="col" style="text-align: center; border-bottom: 1px solid #eee;">
+			<h1 style="font-size: 60px;">Meet our staff</h1>
+		</div>
+	</div>
+
+	<div class="row bg-light" style="padding: 5px;">
+	</div>
+	
+	<div class="row bg-light">
+		{% for staff_member in staff %}
+		<div class="col-6" style="text-align: left;">
+			<div class="row" style="">
+				<img style="height: 100%; width: 100%;" src="/salon/media/{{ staff_member.picture }}">
+			</div>
+			<div class="row bg-info progress-bar" style="border-bottom: 1px dashed #17eeee;">
+				<div class="col">
+					<h1 style="text-align: left; font-family: serif; font-style: georgia;">{{ staff_member.name }}</h1>		
+				</div>
+			</div>
+			<div class="row">
+				<div class="col bg-info">
+					<h2 style="font-size: 20px;">{{ staff_member.bio }}</h2>	
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+ 
+	</div>
+</div>
+{% endblock %}

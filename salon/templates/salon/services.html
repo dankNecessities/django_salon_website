@@ -1,0 +1,38 @@
+{% extends 'salon/base.html' %}
+{% load static %}
+{% block title %}Services{% endblock %}
+{% block body_block %}
+<style type="text/css">
+	.img-custom{
+		max-width: 100%;
+	}
+</style>
+<div class="container">
+	<div class="row bg-light">
+		<div class="col" style="text-align: center; border-bottom: 1px solid #eee;">
+			<h1 style="font-size: 60px;">{{ service_name }}</h1>
+		</div>
+	</div>
+
+	<div class="row bg-light" style="padding: 5px;">
+	</div>
+
+	<section class="row text-center placeholders bg-light">
+	{% for service in service_list %}
+	<div class="col-6 col-sm-3 placeholder" style="padding-bottom: 4px;">
+        <img src="/salon/media/{{ service.picture }}" width="200" height="200" class="rounded-circle img-custom" alt="Generic placeholder thumbnail">
+        <h4>{{ service.name }}</h4>
+        {% if user.is_authenticated %}
+        <img src="/static/salon/images/jag_blue.jpg" width="20" height="20" class="rounded-circle" alt="Generic placeholder thumbnail"> {{ service.views }}
+        <img src="/static/salon/images/jag_black.jpg" width="20" height="20" class="rounded-circle" alt="Generic placeholder thumbnail"> {{ service.likes }}
+        {% else %}
+        Log in to vote!
+        {% endif %}
+        <div class="text-muted">{{ service.description }}</div>
+        
+    </div>		
+	{% endfor %}	
+	</section>
+		
+</div>
+{% endblock %}

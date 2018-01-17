@@ -1,13 +1,60 @@
 {% extends 'salon/base.html' %}
+{% load static %}
 {% block body_block %}
+    <style>
+        /* Make the image fully responsive */
+          .carousel-inner img {
+              width: 100%;
+              height: 100%;
+          }
+
+    </style>
 	<div class="row bg-dark" style="padding: 5px;">
         <div class="col">
         </div>
     </div>
-    <div class="row" style="text-align: center;">
-        <div class="col">
-            <h1>Main</h1>   
+    <div class="row">
+        <div id="demo" class="carousel slide" data-ride="carousel">
+
+            <!-- Indicators -->
+            <ul class="carousel-indicators">
+              <li data-target="#demo" data-slide-to="0" class="active"></li>
+              <li data-target="#demo" data-slide-to="1"></li>
+              <li data-target="#demo" data-slide-to="2"></li>
+            </ul>
+          
+            <!-- The slideshow -->
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <img src="{% static 'salon/images/jag_blue.jpg' %}" alt="Los Angeles" width="1100" height="500">
+                <div class="carousel-caption">
+                    <img style="width: 30%; height: 30%;" src="{% static 'salon/images/icons/jadore-icon-small.png' %}">
+                    <h1 style="font-family: serif; font-style: georgia; ">Salon <a style="color: pink;">J'adore</a></h1>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <img src="{% static 'salon/images/jag_black.jpg' %}" alt="Chicago" width="1100" height="500">
+                <div class="carousel-caption">
+                    <h1 style="font-size: 300%; font-family: serif; font-style: georgia;">Where <strong> comfort</strong> meets <i> style</i></h1>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <img src="{% static 'salon/images/space.jpg' %}" alt="New York" width="1100" height="500">
+              </div>
+            </div>
+          
+            <!-- Left and right controls -->
+            <a class="carousel-control-prev" href="#demo" data-slide="prev">
+              <span class="carousel-control-prev-icon"></span>
+            </a>
+            <a class="carousel-control-next" href="#demo" data-slide="next">
+              <span class="carousel-control-next-icon"></span>
+            </a>
         </div>
     </div>
-    <hr>
+    <div class="row bg-light" style="padding: 5px;">
+        <div class="col">
+        </div>
+    </div>
+
 {% endblock %}

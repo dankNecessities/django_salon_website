@@ -1,13 +1,15 @@
 from django.contrib import admin
-from salon.models import Service, ServiceType, Blog, Staff, UserProfile, Links
+from salon.models import Blog, Staff, UserProfile, ServiceType, Service
 
-class ServiceTypeAdmin(admin.ModelAdmin):
-	list_display = ('service', 'name', 'views', 'likes')
+class ServiceAdmin(admin.ModelAdmin):
+	list_display = ('name', 'service_type', 'views', 'likes')
+
+class StaffAdmin(admin.ModelAdmin):
+	list_display = ('name', 'bio')
 
 # Register your models here.
-admin.site.register(Service)
-admin.site.register(ServiceType, ServiceTypeAdmin)
 admin.site.register(Blog)
-admin.site.register(Staff)
+admin.site.register(Staff, StaffAdmin)
 admin.site.register(UserProfile)
-admin.site.register(Links)
+admin.site.register(ServiceType)
+admin.site.register(Service, ServiceAdmin)

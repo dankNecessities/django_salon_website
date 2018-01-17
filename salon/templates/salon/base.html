@@ -2,15 +2,15 @@
 <html>
   <head>
     {% load static %}
-    <title>Salon J'adore</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'salon/css/bootstrap.min.css' %}">
+    <title>{% block title %}Salon J'adore {% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'salon/css/bootstrap4-beta-2.min.css' %}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
     <!-- Navigation Bar -->
     <header>
       <nav class="navbar navbar-expand-md navbar-dark bg-danger">
-        <a class="navbar-brand" href="#">Base</a>
+        <a class="navbar-brand" href="/salon/"><img src="{% static 'salon/images/icons/jadore-icon-small.png' %}" width="35" height="35" ></a>
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
           <span class="navbar-toggler-icon"></span>
@@ -19,29 +19,32 @@
         <div class="navbar-collapse collapse" id="collapsibleNavbar">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-              <a class="nav-link" href="">About</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="">User</a>
+              <a class="nav-link" href="/salon/about/">Inhouse</a>
             </li>
           </ul>
           <form class="form-inline mt-2 mt-md-0">
             
             <input type="text" name="" class="form-control mr-sm-2" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
-            <span style="padding: 20px;"></span>
-
-            <a href="">
-              <button class="btn btn-outline-warning my-2 my-sm-0" type="submit">Login</button> 
-            </a>
                   
-                  <span style="padding: 5px;"></span>
-
-                  <a href="">
-                    <button class="btn btn-outline-warning my-2 my-sm-0" type="submit" href="">Register</button>  
-                  </a>
-                  
-              </form>
+          </form>
+          <div style="padding: 20px;"></div>
+          {% if user.is_authenticated %}
+          <a class="text-white">Welcome, {{ user.name }}</a>
+          <div style="padding: 5px;"></div>
+          <div style="padding: 5px;"></div>
+          <a href="">
+            <button class="btn btn-outline-warning my-2 my-sm-0" type="submit">Logout</button> 
+          </a>
+          {% else %}
+          <a href="/salon/login/">
+            <button class="btn btn-outline-warning my-2 my-sm-0" type="submit">Login</button> 
+          </a>
+          <div style="padding: 5px;"></div>
+          <a href="/salon/register/">
+            <button class="btn btn-outline-warning my-2 my-sm-0" type="submit">Register</button>  
+          </a>
+          {% endif %}
         </div>
       </nav>  
     </header>
@@ -55,64 +58,46 @@
         <nav class="col-sm-3 col-md-2 d-sm-block bg-light" style="border-right: 1px solid #eee">
           <ul class="nav nav-pills flex-column">
             <li class="nav-item" >
-              <a class="nav-link" href=""></a>    
+              <a class="nav-link" style="font-size: 20px;">Services we offer</a>    
             </li>
+
+            {% for service_type in service_types %}
             <li class="nav-item">
-              <a class="nav-link" href=""><strong>SideBar L1</strong></a>     
+              <a class="nav-link" href="/salon/services/{{ service_type.name }}"><strong>{{ service_type.name }}</strong></a>     
             </li>
+            {% endfor %}
+            
             <li class="nav-item">
-              <a class="nav-link" href=""><strong>SideBar L2</strong></a>     
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href=""><strong>SideBar L3</strong></a>     
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href=""><strong>SideBar L4</strong></a>     
-            </li>
-            <li class="nav-item" >
-              <a class="nav-link" href=""></a>    
+              <a class="nav-link"></a>    
             </li>
           </ul>
         </nav>
         
         <!-- Main Pane -->
-        <div class="container bg-light col">
+        <div class="container bg-white col">
           {% block body_block %}
           {% endblock %}
         </div>
 
-        <!-- Links Pane -->
-        <nav class="col-md-1 d-sm-block bg-light" style="border-left: 1px solid #eee">
-          <ul class="nav nav-pills flex-column">
-            <li class="nav-item" >
-              <a class="nav-link"></a>    
-            </li>
-            <li class="nav-item">
+      </div>
+
+      <!-- Links Pane -->
+      <div class="row bg-white" style="padding: 5px;">
+          <div class="col bg-dark" style="text-align: center;">
               <a class="nav-link" href="http://www.facebook.com" target="_blank">
-                <img src="{% static 'salon/images/facebook-icon.png' %}" alt="Facebook" height="50" width="50" />
+                <img src="{% static 'salon/images/icons/facebook-icon.png' %}" alt="Facebook" height="50" width="50" />
               </a>
-            </li>
-            <li class="nav-item" >
-              <a class="nav-link"></a>    
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="">
-                <img src="{% static 'salon/images/insta_icon.png' %}" alt="Instagram" height="50" width="50">
+          </div>
+          <div class="col bg-primary" style="text-align: center;">
+              <a class="nav-link" href="http://www.twitter.com" target="_blank">
+                <img src="{% static 'salon/images/icons/twitter-icon.png' %}" alt="Twitter" height="50" width="50">
               </a>
-            </li>
-            <li class="nav-item" >
-              <a class="nav-link"></a>    
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="">
-                <img src="{% static 'salon/images/twitter-icon.png' %}" alt="Twitter" height="50" width="50">
+          </div>
+          <div class="col bg-secondary" style="text-align: center;">
+              <a class="nav-link" href="http://www.instagram.com" target="_blank">
+                <img src="{% static 'salon/images/icons/insta_icon.png' %}" alt="Instagram" height="50" width="50">
               </a>
-            </li>
-            <li class="nav-item" >
-              <a class="nav-link"></a>    
-            </li>
-          </ul>
-        </nav>
+          </div>
       </div>
     </div>
 
