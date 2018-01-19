@@ -154,8 +154,8 @@ def compare(terma, termb):
 	matchlist = []
 	success_percentage = 0.5
 
-	for i in terma:
-		if i in termb:
+	for i in terma.lower():
+		if i in termb.lower():
 			if i not in matchlist:
 				matchlist.append(i)
 	try:
