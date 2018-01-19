@@ -12,7 +12,7 @@
 	</div>
 
 	<div class="row bg-light">
-		{% if registered %}
+		{% if registered or user.is_authenticated %}
 		<div class="col">
 			<strong style="font-size: 30px;">Thank you for registering!</strong><br>
 			<a class="text-success" style="text-decoration: none;" href="/salon/">Return to the homepage</a>
@@ -21,7 +21,8 @@
 		<div class="col text-info bg-light">
 			<form class="form-signin span8" method="POST" action="/salon/register/" enctype="multipart/form-data">
 				{% csrf_token %}
-				<h2 class="text-secondary">Sign up</h2>
+				<h2>Sign up!</h2>
+				<h4 class="text-secondary">It's easy, free and adds you to our mailing list</h4>
 				<div>
 					{% for field in user_form.visible_fields %}
 					{{ field.errors }}

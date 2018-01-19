@@ -10,7 +10,7 @@
 <div class="container">
 	<div class="row bg-light">
 		<div class="col" style="text-align: center; border-bottom: 1px solid #eee;">
-			<h1 style="font-size: 60px;">{{ service_name }}</h1>
+			<h1 style="font-size: 60px; font-family: serif; font-style: georgia;">{{ service_name }}</h1>
 		</div>
 	</div>
 
@@ -21,10 +21,12 @@
 	{% for service in service_list %}
 	<div class="col-6 col-sm-3 placeholder" style="padding-bottom: 4px;">
         <img src="/salon/media/{{ service.picture }}" width="200" height="200" class="rounded-circle img-custom" alt="Generic placeholder thumbnail">
-        <h4>{{ service.name }}</h4>
+        <h4 style="font-family: serif; font-style: georgia;">{{ service.name }}</h4>
         {% if user.is_authenticated %}
-        <img src="/static/salon/images/jag_blue.jpg" width="20" height="20" class="rounded-circle" alt="Generic placeholder thumbnail"> {{ service.views }}
-        <img src="/static/salon/images/jag_black.jpg" width="20" height="20" class="rounded-circle" alt="Generic placeholder thumbnail"> {{ service.likes }}
+        <a href="" id="{{ service.id }}" class="like-btn" data-usrid="{{ user.id }}">
+        	<img src="/static/salon/images/icons/heart-hollow-icon.png" width="20" height="20" alt="Generic placeholder thumbnail">	
+        </a>
+        {{ service.likes }}	
         {% else %}
         Log in to vote!
         {% endif %}
@@ -33,6 +35,6 @@
     </div>		
 	{% endfor %}	
 	</section>
-		
+
 </div>
 {% endblock %}

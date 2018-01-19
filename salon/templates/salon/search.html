@@ -1,0 +1,33 @@
+{% extends 'salon/base.html' %}
+{% load static %}
+{% block title_block %}Results{% endblock %}
+{% block body_block %}
+<div class="container">
+	<div class="row bg-light">
+		<div class="col" style="text-align: center; border-bottom: 1px solid #eee;">
+			<h1 style="font-size: 60px; font-family: serif; font-style: georgia;">Search Results</h1>
+		</div>
+	</div>
+
+	<div class="row bg-light" style="padding: 5px;">
+		<div class="col" style="text-align: center; border-bottom: 1px solid #eee;">
+			{% for res in result_list %}
+			<div class="row bg-light">
+				<div class="col-5">
+					<h4>{{ res.name }}</h4>
+				</div>
+				<div class="col-5">
+					<h4>in  {{ res.service_type }}</h4>
+				</div>		
+			</div>
+			<hr>			
+			{% endfor %}	
+		</div>
+	</div>
+
+	<div class="row bg-light">
+		
+	</div>
+
+</div>
+{% endblock %}

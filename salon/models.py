@@ -49,3 +49,7 @@ class UserProfile(models.Model):
 
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
 	picture = models.ImageField(upload_to='profile_images', blank=True)
+	liked_services = models.ManyToManyField(Service, verbose_name="list of liked services", blank=True)
+
+	def __str__(self):
+		return self.user.username

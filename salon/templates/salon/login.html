@@ -1,5 +1,41 @@
 {% extends 'salon/base.html' %}
 {% load static %}
 {% block body_block %}
+<div class="container">
+	<div class="row bg-light">
+		<div class="col" style="text-align: center; border-bottom: 1px solid #eee;">
+			<h1 style="font-size: 60px;">Login</h1>
+		</div>
+	</div>
 
+	<div class="row bg-light" style="padding: 5px;">
+	</div>
+
+	<div class="row bg-light">
+		{% if user.is_authenticated %}
+		<div class="col">
+			<strong style="font-size: 30px;">Welcome, {{ user }}</strong><br>
+			<a class="text-success" style="text-decoration: none;" href="/salon/">Go to the homepage</a>
+		</div>
+		{% else %}
+		<div class="col text-info bg-light">
+			<form class="form-signin span8" method="POST" action="/salon/login/" enctype="multipart/form-data">
+				{% csrf_token %}
+				<h4 class="text-secondary">Login to vote for your favourite services!</h4>
+				<div>
+					{{ user_disabled }}
+					{{ invalid_details }}
+				</div>
+				Username <input type="text" name="username" required="true" class="form-control mr-sm-2" placeholder="Username" aria-label="Search">
+				Password
+				<input type="password" name="password" required="true" class="form-control mr-sm-2" placeholder="Password" aria-label="Search">
+				<div style="padding: 5px;"></div>
+				<button class="btn btn-primary" type="submit">Sign In</button>
+			</form>	
+		</div>
+		<div class="col"></div>
+		{% endif %}
+	</div>
+
+</div>
 {% endblock %}

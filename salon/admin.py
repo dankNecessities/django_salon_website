@@ -7,8 +7,11 @@ class ServiceAdmin(admin.ModelAdmin):
 class StaffAdmin(admin.ModelAdmin):
 	list_display = ('name', 'bio')
 
+class BlogAdmin(admin.ModelAdmin):
+	list_display = ('title', 'publish_date')
+
 # Register your models here.
-admin.site.register(Blog)
+admin.site.register(Blog, BlogAdmin)
 admin.site.register(Staff, StaffAdmin)
 admin.site.register(UserProfile)
 admin.site.register(ServiceType)
