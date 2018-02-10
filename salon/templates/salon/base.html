@@ -136,7 +136,11 @@
         <div class="col bg-light">
           {% if top_blog.image %}
             <div class="row">
-              <img style="width: 50vw; height: 30vw;" src="/salon/media/{{ top_blog.image }}">  
+              <div class="col"></div>
+              <div class="col">
+                  <img style="width: 50vw; height: 30vw;" src="/salon/media/{{ top_blog.image }}">    
+              </div>
+              <div class="col"></div>
             </div>
           {% endif %}
           <hr>
