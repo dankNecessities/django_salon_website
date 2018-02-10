@@ -23,7 +23,7 @@
         <img src="/salon/media/{{ service.picture }}" width="200" height="200" class="rounded-circle img-custom" alt="Generic placeholder thumbnail">
         <h4 style="font-family: serif; font-style: georgia;">{{ service.name }}</h4>
         {% if user.is_authenticated %}
-        <a href="" id="{{ service.id }}" class="like-btn" data-usrid="{{ user.id }}">
+        <a href="" id="{{ service.id }}" class="serv-like-btn" data-usrid="{{ user.id }}">
         	<img src="/static/salon/images/icons/heart-hollow-icon.png" width="20" height="20" alt="Generic placeholder thumbnail">	
         </a>
         {{ service.likes }}	

@@ -19,16 +19,16 @@
         <div class="navbar-collapse collapse" id="collapsibleNavbar">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-              <a class="nav-link" href="/salon/about/">Inhouse</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/salon/blog/">Blog</a>
+              <a class="nav-link" href="/salon/blog/">Our Beauty Tips</a>
             </li>
             {% if user.is_authenticated %}
             <li class="nav-item">
-              <a class="nav-link" href="/salon/user/{{ user }}">Profile</a>
+              <a class="nav-link" href="/salon/user/{{ user }}">Your Profile</a>
             </li>
             {% endif %}
+            <li class="nav-item">
+              <a class="nav-link" href="/salon/about/">The Pros</a>
+            </li>
           </ul>
           <form method="GET" action="/salon/search/" class="form-inline mt-2 mt-md-0">
             {% csrf_token %}
@@ -61,24 +61,7 @@
     <div class="container-fluid">
       <div class="row">
 
-        <!-- Side Pane -->
-        <nav class="col-sm-3 col-md-2 d-sm-block bg-light" style="border-right: 1px solid #eee">
-          <ul class="nav nav-pills flex-column">
-            <li class="nav-item" >
-              <a class="nav-link" style="font-size: 20px;">Select one of our services below</a>    
-            </li>
-
-            {% for service_type in service_types %}
-            <li class="nav-item">
-              <a class="nav-link" href="/salon/services/{{ service_type.name }}"><strong>{{ service_type.name }}</strong></a>     
-            </li>
-            {% endfor %}
-            
-            <li class="nav-item">
-              <a class="nav-link"></a>    
-            </li>
-          </ul>
-        </nav>
+        
         
         <!-- Main Pane -->
         <div class="container bg-white col">
@@ -87,8 +70,108 @@
         </div>
 
       </div>
+      
+      <!-- Footer-->
+      <hr>
+      <!-- Service Pane -->
+      <div class="row">
+          <div class="col" style="text-align: center;">
+              <a style="font-size: 20px; color: orange;">What kind of service are you looking for?</a>      
+          </div>
+      </div>
+      <div class="row bg-light" style="border-right: 1px solid #eee">
+          <div class="col-2 col-sm-2">
+          </div>
 
+          {% for service_type in service_types %}
+          <div class="col-sm-2" style="text-align: center;">
+            <a href="/salon/services/{{ service_type.name }}"><strong style="font-size: 25px;">{{ service_type.name }}</strong></a>
+          </div>
+          {% endfor %}
+          
+          <div class="col col-sm-2">
+          </div>
+      </div>
+
+      <hr>
+      <!-- Most likes -->
+      <div class="row">
+          <div class="col" style="text-align: center;">
+              <a style="font-size: 20px;" class="text-danger">These are our most liked services</a>      
+          </div>
+      </div>
+      <div class="row">
+          <div class="col" style="text-align: center;">
+              <a style="font-size: 16px;" class="text-info">Please log in to vote!</a>      
+          </div>
+      </div>
+      <div class="row text-center placeholders bg-light">
+        {% for service in all_services %}
+        <div class="col-6 col-sm-3 placeholder" style="padding: 20px;">
+              <img src="/salon/media/{{ service.picture }}" width="100" height="100" class="rounded-circle img-custom" alt="Generic placeholder thumbnail">
+              <h4>{{ service.name }}</h4>
+              {% if user.is_authenticated %}
+              <a href="" id="{{ service.id }}" class="serv-like-btn" data-usrid="{{ user.id }}">
+                <img src="/static/salon/images/icons/heart-hollow-icon.png" width="20" height="20" alt="Generic placeholder thumbnail">
+              </a>{{ service.likes }}
+              {% else %}
+              Please log in to vote
+              {% endif %}
+              <div class="text-white">{{ service.description }}</div>
+          </div>    
+        {% endfor %}  
+      </div>
+
+      <hr>
+      <!-- Best blog -->
+      <div class="row">
+          <div class="col" style="text-align: center;">
+              <a style="font-size: 25px;" class="text-info">Viewer's choice beauty tip</a>      
+          </div>
+      </div>
+      <hr>
+      <div class="row bg-light">
+        <div class="col col-sm-2">
+        </div>
+        <div class="col bg-light">
+          {% if top_blog.image %}
+            <div class="row">
+              <img style="width: 50vw; height: 30vw;" src="/salon/media/{{ top_blog.image }}">  
+            </div>
+          {% endif %}
+          <hr>
+          <h2 style="text-align: center; font-family: serif; font-style: georgia;">{{ top_blog.title }}</h2>
+          <hr>
+            <div class="row">
+                <div class="col">
+                    <strong>{{ top_blog.publish_date }}</strong><br>
+                    {% if user.is_authenticated %}
+                    <a href="" id="{{ top_blog.id }}" class="blog-like-btn" data-usrid="{{ user.id }}">
+                      <img src="/static/salon/images/icons/heart-hollow-icon.png" width="20" height="20" alt="Generic placeholder thumbnail"> 
+                    </a>{{ top_blog.likes }}
+                    {% endif %}   
+                </div>
+            </div>
+          <div class="row bg-light" style="text-align: center;">
+            
+            <div class="col" style="padding: 3px;">
+              {{ top_blog.content }} 
+            </div>
+            
+          </div>
+          <hr>
+        </div>
+        <div class="col col-sm-2">
+        </div>
+      </div>
+
+      <hr>
       <!-- Links Pane -->
+      <div class="row">
+          <div class="col" style="text-align: center;">
+              <a style="font-size: 20px;">Follow us on our social media!</a>      
+          </div>
+      </div>
       <div class="row bg-white" style="padding: 5px;">
           <div class="col bg-dark" style="text-align: center;">
               <a class="nav-link" href="http://www.facebook.com" target="_blank">
@@ -108,11 +191,11 @@
       </div>
     </div>
 
-    <!-- Footer -->
     <hr>
     <footer>
       <div class="container">
-        <p>&copy; <a href="">SamO Media PLC</a> </p>
+        <p class="text-dark">&copy; <a style="text-decoration: none;">Salon J'adore Ltd.</a> Call us on 0702373178</p>
+        <p></p>
       </div>
     </footer>
 

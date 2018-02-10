@@ -4,17 +4,19 @@
 <div class="container">
 		
 	<div class="row bg-info" style="border-left: 1px solid #eee;">
-		<div class="col-3">
-			<img src="/salon/media/{{ profile.picture }}" height="170" width="150">
+		<div class="col-4"></div>
+
+		<div class="col-4">
+			<img src="/salon/media/{{ profile.picture }}" width="100%">
 		</div>
-		
-		<div class="col-5" style="text-align: center;">
-			<h1 style="font-size: 60px; font-family: serif; font-style: georgia;" class="text-white">{{ user }}'s profile</h1>	
-		</div>
+
+		<div class="col-4"></div>
+				
 	</div>
 
 	<div class="row bg-info">
-		<div class="col-3">
+		<div class="col-4"></div>
+		<div class="col-4">
 			<form action="" method="POST" enctype="multipart/form-data" action="/salon/user/{{ user }}">
 				{% csrf_token %}
 				<a style="font-family: serif; font-style: georgia;">Change picture</a>
@@ -22,6 +24,17 @@
 				<button type="submit" class="btn btn-primary">Submit</button>
 			</form>
 		</div>
+		<div class="col-4"></div>
+	</div>
+
+	<div class="row bg-info">
+		<div class="col"></div>
+
+		<div class="col" style="text-align: center;">
+			<h1 style="font-size: 60px; font-family: serif; font-style: georgia;" class="text-white">{{ user }}'s likes</h1>	
+		</div>
+
+		<div class="col"></div>
 	</div>
 
 	<div class="row bg-info" style="padding: 5px;">
@@ -31,13 +44,13 @@
 		
 
 		<div class="col bg-secondary">
-			<h1>Favourites</h1>
+			<h1>Favourite Services</h1>
 			<div class="row text-center placeholders bg-info">
 				{% for service in liked_services %}
 				<div class="col-6 col-sm-3 placeholder" style="padding: 20px;">
 			        <img src="/salon/media/{{ service.picture }}" width="100" height="100" class="rounded-circle img-custom" alt="Generic placeholder thumbnail">
 			        <h4>{{ service.name }}</h4>
-			        <a href="" id="{{ service.id }}" class="like-btn" data-usrid="{{ user.id }}">
+			        <a href="" id="{{ service.id }}" class="serv-like-btn" data-usrid="{{ user.id }}">
 			        	<img src="/static/salon/images/icons/heart-hollow-icon.png" width="20" height="20" alt="Generic placeholder thumbnail">	
 			        </a>{{ service.likes }}
 			        <div class="text-white">{{ service.description }}</div>
@@ -49,6 +62,46 @@
 
 	</div>
 
+	<div class="row bg-info" style="padding: 5px;">
+	</div>
+
+	<div class="row bg-light">
+		
+
+		<div class="col bg-secondary">
+			<h1>Favourite Blogs</h1>
+			{% for blog in liked_blogs %}
+			<div class="col bg-light">
+	          {% if blog.image %}
+	            <div class="row">
+	              <img style="width: 50vw; height: 30vw;" src="/salon/media/{{ top_blog.image }}">  
+	            </div>
+	          {% endif %}
+	          <hr>
+	          <h2 style="text-align: center; font-family: serif; font-style: georgia;">{{ blog.title }}</h2>
+	          <hr>
+	            <div class="row">
+	                <div class="col">
+	                    <strong>{{ blog.publish_date }}</strong><br>
+	                    <a href="" id="{{ top_blog.id }}" class="blog-like-btn" data-usrid="{{ user.id }}">
+	                      <img src="/static/salon/images/icons/heart-hollow-icon.png" width="20" height="20" alt="Generic placeholder thumbnail"> 
+	                    </a>{{ blog.likes }}   
+	                </div>
+	            </div>
+	          <div class="row bg-light" style="text-align: center;">
+	            
+	            <div class="col" style="padding: 3px;">
+	              {{ blog.content }} 
+	            </div>
+	            
+	          </div>
+	          <hr>
+	        </div>
+	        {% endfor %}
+		</div>
+	
+
+	</div>
 	
 
 </div>

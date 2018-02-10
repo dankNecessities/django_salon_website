@@ -38,6 +38,7 @@ class Staff(models.Model):
 class Blog(models.Model):
 	
 	title = models.CharField(max_length=128, unique=True)
+	likes = models.IntegerField(default=0)
 	image = models.ImageField(upload_to='blog_images', blank=True)
 	content = models.CharField(max_length=1024)
 	publish_date = models.DateField()
@@ -50,6 +51,7 @@ class UserProfile(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
 	picture = models.ImageField(upload_to='profile_images', blank=True)
 	liked_services = models.ManyToManyField(Service, verbose_name="list of liked services", blank=True)
+	liked_blogs = models.ManyToManyField(Blog, verbose_name="list of liked blogs", blank=True)
 
 	def __str__(self):
 		return self.user.username

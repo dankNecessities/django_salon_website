@@ -1,6 +1,6 @@
 {% extends 'salon/base.html' %}
 {% load static %}
-{% block title %}Blog{% endblock %}
+{% block title %}Beauty Tips{% endblock %}
 {% block body_block %}
 <div class="container">
 	<div class="row bg-light">
@@ -43,7 +43,12 @@
         	<hr>
             <div class="row">
                 <div class="col">
-                    <strong>{{ active_blog.publish_date }}</strong>   
+                    <strong>{{ active_blog.publish_date }}</strong><br>
+                    {% if user.is_authenticated %}
+                        <a href="" id="{{ active_blog.id }}" class="blog-like-btn" data-usrid="{{ user.id }}">
+                          <img src="/static/salon/images/icons/heart-hollow-icon.png" width="20" height="20" alt="Generic placeholder thumbnail"> 
+                        </a>{{ active_blog.likes }}   
+                    {% endif %}
                 </div>
             </div>
         	<div class="row bg-light" style="text-align: center;">

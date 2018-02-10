@@ -6,6 +6,8 @@ from django.contrib.auth.models import User
 from salon.forms import UserForm, UserProfileForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from PIL import Image
+import os, re
 
 # Create your views here.
 def index(request):
@@ -21,6 +23,13 @@ def index(request):
 	context = {
 		'service_types' : service_types, 
 	}
+
+	all_services = Service.objects.order_by('likes').reverse()[:8]
+	top_blog = Blog.objects.order_by('likes').reverse()[0]
+
+	context['all_services'] = all_services
+	context['top_blog'] = top_blog
+	
 	return HttpResponse(template.render(context, request))	
 
 def about(request):
@@ -43,6 +52,13 @@ def about(request):
 		'service_types' : service_types, 
 		'staff' : staff,
 	}
+
+	all_services = Service.objects.order_by('likes').reverse()[:8]
+	top_blog = Blog.objects.order_by('likes').reverse()[0]
+
+	context['all_services'] = all_services
+	context['top_blog'] = top_blog
+	
 	return HttpResponse(template.render(context, request))
 
 def services(request, serv_name):
@@ -51,6 +67,7 @@ def services(request, serv_name):
 	
 	service_type_list = ServiceType.objects.all()
 	service_types = []
+	context = {}
 
 	for serv in service_type_list:
 		service_types.append(serv)
@@ -63,6 +80,12 @@ def services(request, serv_name):
 				'service_list' : service_list,
 				'service_name' : serv.name,
 			}
+
+	all_services = Service.objects.order_by('likes').reverse()[:8]
+	top_blog = Blog.objects.order_by('likes').reverse()[0]
+
+	context['all_services'] = all_services
+	context['top_blog'] = top_blog
 
 	return HttpResponse(template.render(context, request))
 
@@ -85,6 +108,12 @@ def blog(request):
 		'service_types' : service_types, 
 		'blogs' : blogs,
 	}
+
+	all_services = Service.objects.order_by('likes').reverse()[:8]
+	top_blog = Blog.objects.order_by('likes').reverse()[0]
+
+	context['all_services'] = all_services
+	context['top_blog'] = top_blog
 
 	return HttpResponse(template.render(context, request))
 
@@ -113,6 +142,12 @@ def sel_blog(request, blog_name):
 		'blogs' : blogs,
 		'active_blog' : active_blog,
 	}
+
+	all_services = Service.objects.order_by('likes').reverse()[:8]
+	top_blog = Blog.objects.order_by('likes').reverse()[0]
+
+	context['all_services'] = all_services
+	context['top_blog'] = top_blog
 
 	return HttpResponse(template.render(context, request))	
 
@@ -191,7 +226,10 @@ def register(request):
 			profile.user = user
 
 			if 'picture' in request.FILES:
-				profile.picture = request.FILES['picture']
+
+				picture = request.FILES['picture']
+				compress_uploaded_image(picture, (100, 100))
+				profile.picture = picture
 
 			profile.save()
 			registered = True
@@ -211,6 +249,12 @@ def register(request):
 		'registered' : registered,
 		'service_types' : service_types,
 	}
+
+	all_services = Service.objects.order_by('likes').reverse()[:8]
+	top_blog = Blog.objects.order_by('likes').reverse()[0]
+
+	context['all_services'] = all_services
+	context['top_blog'] = top_blog
 
 	return HttpResponse(template.render(context, request))
 
@@ -239,6 +283,11 @@ def user_login(request):
 
 			if user.is_active:
 				login(request, user)
+				user_id = user.id
+
+				request.session['user_id'] = user_id
+				request.session.set_expiry(1000)
+
 				return HttpResponseRedirect('/salon/')
 
 			else:
@@ -247,6 +296,12 @@ def user_login(request):
 		else:
 			context['invalid_details'] = "Invalid login details"
 	
+	all_services = Service.objects.order_by('likes').reverse()[:8]
+	top_blog = Blog.objects.order_by('likes').reverse()[0]
+
+	context['all_services'] = all_services
+	context['top_blog'] = top_blog
+
 	return HttpResponse(template.render(context, request))
 
 @login_required
@@ -267,23 +322,36 @@ def user_page(request, user_name):
 	}
 
 	for prof in user_profile:
-		liked_services = prof.liked_services.all()
-		context['liked_services'] = liked_services
-
+		
 		if str(prof.user) == user_name:
+
+			liked_services = prof.liked_services.all()
+			liked_blogs = prof.liked_blogs.all()
 			context['profile'] = prof	
+			context['liked_services'] = liked_services
+			context['liked_blogs'] = liked_blogs
+			print(context)
 
 			if request.method == 'POST' and 'picture' in request.FILES:
-				prof.picture = request.FILES['picture']
+				picture = request.FILES['picture']
+				compress_uploaded_image(picture, (100, 100))
+
+				prof.picture = picture
 				prof.save()
 
 				return HttpResponseRedirect('/salon/user/' + user_name)
 
+	all_services = Service.objects.order_by('likes').reverse()[:8]
+	top_blog = Blog.objects.order_by('likes').reverse()[0]
 
+	context['all_services'] = all_services
+	context['top_blog'] = top_blog
+	
 	return HttpResponse(template.render(context, request))
 
 @login_required
 def user_logout(request):
+	
 	logout(request)
 
 	return index(request)
@@ -315,10 +383,9 @@ def like_service(request):
 			usr_profile.save()
 			print("HERE22")
 
-			likes = 1
 			ol = serv.likes
 
-			serv.likes = ol + likes
+			serv.likes = ol + 1
 			serv.save()
 		
 		else:
@@ -334,3 +401,91 @@ def like_service(request):
 			print("HERE33")
 
 	return user_page(request, serv.name)
+
+@login_required
+def like_blog(request):
+	liked = False
+
+	if request.method == 'GET':
+		blog_id = int(request.GET['blog_id'])
+		user_id = int(request.GET['user_id'])
+		
+		usr = User.objects.get(id=user_id)
+		usr_profile = UserProfile.objects.get(user=usr)
+		burg = Blog.objects.get(id=blog_id)
+		liked = True
+
+	if liked == True:
+			
+		print(usr_profile.user)
+
+		al = usr_profile.liked_blogs.all()
+
+		if burg not in al:
+			usr_profile.liked_blogs.add(burg)
+			usr_profile.save()
+			print("HERE22")
+
+			likes = 1
+			ol = burg.likes
+
+			burg.likes = ol + likes
+			burg.save()
+		
+		else:
+			dl = usr_profile.liked_blogs.exclude(title=burg)
+			print(dl)
+			usr_profile.liked_blogs.set(dl)
+			usr_profile.save()
+
+			likes = -1
+			ol = burg.likes
+
+			burg.likes = ol + likes
+			burg.save()
+			print("HERE33")
+
+	return user_page(request, burg.name)	
+
+def compress_uploaded_image(original_image, target_resolution=None, overwrite=True):
+	"""Gets images from GET or POST requests, compresses them and optionally overwrites the old file.
+	"""
+
+	#Get the name of the uploaded image
+	original_image_name = str(original_image)	
+	o_nm = re.split('/', original_image_name)
+	
+	#Get rid of directory slashes within image names
+	if len(o_nm) > 1:
+		original_image_name = o_nm[-1]
+
+	#Create a holder file to keep the image data
+	temp_pic = open(original_image_name, 'bw')
+
+	#Write the image parts to the holder file
+	for chunk in original_image.chunks():
+		temp_pic.write(chunk)
+	
+	temp_pic.close()
+
+	#Create a new Image file from the holder file
+	buffer_image = Image.open(temp_pic.name)
+
+	#Resize according to specified resolution
+	if target_resolution is not None:
+		print("ANTIALIASING")
+		buffer_image = buffer_image.resize(target_resolution, Image.ANTIALIAS)
+
+	#Optimize and save the image
+	print("OPTIMIZING AND SAVING")
+	if overwrite == True:
+		buffer_image.save(original_image_name, optimize=True, quality=95)
+	else:
+		new_image_name = "__compressed__" + str(original_image_name)
+		buffer_image.save(new_image_name, optimize=True, quality=95)
+
+	#Delete the holder file
+	print("DELETING TEMPORARY IMAGE")
+	os.remove(temp_pic.name)
+
+	#Return the compressed image
