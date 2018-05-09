@@ -4,13 +4,13 @@
 <div class="container">
 		
 	<div class="row bg-info" style="border-left: 1px solid #eee;">
-		<div class="col-4"></div>
+		<div class="col"></div>
 
-		<div class="col-4">
-			<img src="/salon/media/{{ profile.picture }}" width="100%">
+		<div class="col">
+			<img src="/salon/media/{{ profile.picture }}" style="width: 40vw; height: 30vw;">
 		</div>
 
-		<div class="col-4"></div>
+		<div class="col"></div>
 				
 	</div>
 
@@ -71,10 +71,14 @@
 		<div class="col bg-secondary">
 			<h1>Favourite Blogs</h1>
 			{% for blog in liked_blogs %}
-			<div class="col bg-light">
+			<div class="col bg-info">
 	          {% if blog.image %}
 	            <div class="row">
-	              <img style="width: 50vw; height: 30vw;" src="/salon/media/{{ top_blog.image }}">  
+	            	<div class="col"></div>
+	            	<div class="col">
+	            		<img style="width: 50vw; height: 30vw;" src="/salon/media/{{ top_blog.image }}">  
+	            	</div>
+	            	<div class="col"></div>
 	            </div>
 	          {% endif %}
 	          <hr>
@@ -88,7 +92,7 @@
 	                    </a>{{ blog.likes }}   
 	                </div>
 	            </div>
-	          <div class="row bg-light" style="text-align: center;">
+	          <div class="row bg-info" style="text-align: center;">
 	            
 	            <div class="col" style="padding: 3px;">
 	              {{ blog.content }} 
